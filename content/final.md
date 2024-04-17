@@ -24,7 +24,10 @@ These include:
 ### Preliminary results
 
 ### Reflections on plan progress
-
+We're pretty on progress with our outlined plan, so we think that work has been split up through the weeks pretty well.
+Trying to do version control through Git and Unity caused us some headaches; we're considering changing our framework for the project, but we've yet to decide one way or another.
+Writing the shaders took a little longer than expected, but nothing too bad.
+Overall, our progress is pretty much exactly in line with what our plan was, so we think we're in a good state.
 
 ### Updated work plan
 Here, we present our original project schedule, with the completed items crossed out:
