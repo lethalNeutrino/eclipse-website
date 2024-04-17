@@ -23,6 +23,15 @@ These include:
 - A basic rendering of the star's corona 
 ### Preliminary results
 
+Here is a short video of a rendering of our sun:
+![](../static/milestone/sun_render_video.mp4)
+
+Here is a video of us detailing our progress so far:
+
+
+Here are our project milestone slides (berkeley dot edu account required):
+[link](https://docs.google.com/presentation/d/1D1iDlvEi04ZeOGGfWA8Nlf4K3nUhdPnpQOIle3osOLY/edit?usp=sharing)
+
 ### Reflections on plan progress
 
 
@@ -46,4 +55,25 @@ Week 3 - 4/23
 Week 4 - 4/30
 - Debugging + Finishing touches
 
-Here, we present an updated project schedule, taking into account 
+Here, we present an updated project schedule, taking into account our progress so far:
+
+Week 1 - 4/9
+- ~~Application setup~~
+- ~~Camera system~~
+- ~~Sphere rendering~~
+- ~~Noise functions~~
+
+Week 2 - 4/16
+- ~~Blackbody radiation~~
+- ~~Corona~~
+
+Week 3 - 4/23
+- Re-examination of framework
+- Atmospheric effects + solar flares
+- Moon modeling + eclipse effects
+
+Week 4 - 4/30
+- Camera pathing
+- UI features
+- Debugging + finishing touches
+- Project writeups + deliverables
