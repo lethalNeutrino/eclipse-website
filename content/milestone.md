@@ -21,11 +21,8 @@ These include:
 - Perlin and fractal noise functions to simulate the Sun's surface
 - Blackbody radiation to find the correct star color based on temperature
 - A basic rendering of the star's corona 
+
 ### Preliminary results
-
-Here is a short video of a rendering of our sun:
-![](../static/milestone/sun_render_video.mp4)
-
 Here is a video of us detailing our progress so far:
 
 
