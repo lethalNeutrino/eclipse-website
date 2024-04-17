@@ -23,6 +23,8 @@ These include:
 - A basic rendering of the star's corona 
 ### Preliminary results
 
+<iframe src="https://drive.google.com/file/d/1qG3P6DkMyDPRBvkbKj1j6rZBin0__Sis/preview" width="640" height="480" allow="autoplay"></iframe>
+
 ### Reflections on plan progress
 We're pretty on progress with our outlined plan, so we think that work has been split up through the weeks pretty well.
 Trying to do version control through Git and Unity caused us some headaches; we're considering changing our framework for the project, but we've yet to decide one way or another.
