@@ -100,10 +100,6 @@
         trim_end_matches(pat="/") %}
         {% set language_site_path = '/' ~ language_site_path_without_prefix %}
         <li><a {% if language_site_path=="/" or language_site_path is starting_with("/page/") %}class="current" {% endif %} href="{{ get_url(path="@/_index.md", lang=lang) }}">{{ "Home" }}</a></li>
-        <li><a {% if language_site_path is starting_with("/hw1") %}class="current" {% endif %} href="{{ get_url(path="@/hw1.md", lang=lang) }}">{{ "Homework 1" }}</a></li>
-        <li><a {% if language_site_path is starting_with("/hw2") %}class="current" {% endif %} href="{{ get_url(path="@/hw2.md", lang=lang) }}">{{ "Homework 2" }}</a></li>
-        <li><a {% if language_site_path is starting_with("/hw3") %}class="current" {% endif %} href="{{ get_url(path="@/hw3.md", lang=lang) }}">{{ "Homework 3" }}</a></li>
-        <li><a {% if language_site_path is starting_with("/hw4") %}class="current" {% endif %} href="{{ get_url(path="@/hw4.md", lang=lang) }}">{{ "Homework 4" }}</a></li>
       </div>
       <div class="information">
         <div class="back_btn">
