@@ -24,7 +24,7 @@ These include:
 
 ### Preliminary results
 Here is a video of us detailing our progress so far:
-
+<iframe src="https://drive.google.com/file/d/1qG3P6DkMyDPRBvkbKj1j6rZBin0__Sis/preview" width="640" height="480" allow="autoplay"></iframe>
 
 Here are our project milestone slides (berkeley dot edu account required):
 [link](https://docs.google.com/presentation/d/1D1iDlvEi04ZeOGGfWA8Nlf4K3nUhdPnpQOIle3osOLY/edit?usp=sharing)
