@@ -16,7 +16,7 @@ Our final project was an interactive demo that renders a star with an orbiting b
 
 ### Technical Approach 
 
-
+Most of this project followed the steps in the blog post *Seeds of Andromeda* in our citations. Although we started from a blank Unity project, we relied heavily on the details provided in the blog to help us generate our simulation. Although the general structure of the implementation was similar, we ended up taking some differing design choices, such as using HLSL as opposed to GLSL, as well as using the Unity rendering pipeline, and manually implementing billboarding.   
 
 The key component of our approach was Perlin noise. We mostly used HLSL shaders in our code to render both the star and the corona. To add more control over the noise, we implemented fractal noise, where we sampled several octaves of noise with varying frequencies to give different appearances of the noise.
 
@@ -55,10 +55,8 @@ To smoothly vary our noise textures across not just the surface of the star, but
 
 <style>
 img {
-  display: block;
   margin-left: auto;
   margin-right: auto;
-  width: 90%;
 }
 </style>
 
@@ -151,6 +149,43 @@ With gradient noise and cellular noise on top of the base texture:
 <p style="text-align:center">
 <img src="../nice_sun.png" style="width:30%">
 </p>
+#### Sunspots
+
+We used the below code snippet of code to generate our sunspots.
+```
+float s = 0.3;
+float t1 = snoise(sPosition * _ssFreq) - s;
+float t2 = snoise((sPosition + _Radius) * _ssFreq) - s;
+float ss = (max(t1, 0.0) * max(t2, 0.0)) * 2.0;
+
+// Accumulate total noise
+float total = n - ss;
+```
+
+This code uses more perlin noise, albeit at a lower frequency (`_ssFreq` denotes the sunspot frequency uniform), and subtracting this from our total to create dark spots on the surface of the star. The purpose of the `t2` parameter along with the `_Radius` parameter was to properly adjust the sunspots based on real stars. Sunspots in stars tend to be the same size, but larger stars have more sunspots. To emulate this, we simulated more but smaller sunspots on larger stars. For images of sunspots, see the results section below.
+
+#### Blackbody Radiation and Color Shifting
+The noise-based rendering only gives the brightness of the light, but using some physics it's possible to compute the color of the light based on the temperature of the star. There are two components that need to be accounted for: the actual color of the blackbody radiation itself, and the change in intensity. The formula for computing blackbody radiation wavelength strength is given by
+
+$$\displaystyle B_{\lambda }(\lambda ,T)={\frac {2hc^{2}}{\lambda ^{5}}}{\frac {1}{e^{ hc / (\lambda k_{\mathrm {B} }T)}-1}}$$
+
+where $T$ is temperature and $\lambda$ is the desired wavelength. Computing this in real time with graphics is possible, but a little complicated with shaders because of the size of the numbers involved, and because the color gamut of the display is not necessarily known in advance, so figuring out what wavelengths exactly to use for each of the red, green, and blue LEDs is somewhat of a guessing game by the time we get to the shader. Instead, we used a texture that computed the color based on temperature in advance, and merely sampled from it based on an input temperature, which is both faster and easier.
+
+For the intensity, we were still facing some similar shader issues as with color, so we again used a workaround: we approximated the increase in intensity for each color by some "magic" linear equations, shown below along with the total color obtained from the blackbody radiation code:
+```	
+// some linear interpolation of temperature to read from the temperature texture, 
+// which handles between 800 K and 30,000 K
+float u = (_Temp - 800.0) / 29200.0;
+float4 color = tex2D(_TempTex, float2(u, 0));
+// this code is refactored here to be easier to read
+float colorRedShift = _Temp * (0.0534 / 255.0) - (43.0/255.0);
+float colorGreenShift = _Temp * (0.0628 / 255.0) - (77.0 / 255.0);
+float colorBlueShift = _Temp * (0.0735/255.0) - (115.0/255.0);
+float4 tempColorShift = float4(colorRedShift,colorGreenShift,colorBlueShift,1.0);
+return float4(total, total, total, 1) * shiftedColor;
+```
+
+`_Temp` is the input temperature, and `total` is the brightness computed by the noise functions as described earlier.
 
 #### Corona Rendering
 
@@ -198,7 +233,7 @@ Another one of these challenges was implementing the corona shader as a billboar
 
 Rendering the moon was also a challenge, as Unity did not have a built-in displacement mapping function for objects. We tried to use third-party packages that included displacement mapping, but there were some notable issues, particularly that there was significant distortion of the textures near the poles of the sphere. Thus, we ended up writing our own displacement mapping shader using our knowledge from homework 4.
 
-4. HDR
+We also had trouble with getting HDR rendering to work: originally, we added HDR directly to the shaders we wrote, but this didn't play well with Unity and our implementation of color filtering, making the scene appear much darker than it should. There wasn't an easy workaround for this, since we were planning to use an in-scene translucent filter to shift down color, but at that point the pixel values were written to the screen buffer by the shader. The solution was to introduce a volume around the Sun which filtered some light out (while remaining in the HDR range), and use post-processing effects for the color filter which played nicely with the HDR rendering.
 
 #### Learnings
 We had a fair amount of learning moments while completing this project.
@@ -220,6 +255,27 @@ Below is an image of the sun without an eclipsing moon:
 <p style="text-align:center">
 <img src="./sun_final.png" style="width:50%">
 </p>
+
+In addition, by modifying the distance between the camera and the scene, we are able to simulate an annular eclipse, and by rotating the camera around the sun, we are able to simulate a partial eclipse:
+
+<p style="text-align:center">
+<img src="./sun_annular.png" style="width:30%"> <img src="./sun_partial.png" style="width:30%">
+<br>
+Above left: a simulation of an annular eclipse. Above right: a simulation of a partial eclipse
+</p>
+
+Below is an example of two different star temperatures, demonstrating blackbody radiation.
+
+<p style="text-align:center">
+<img src="./sun_warmer.png" style="width:30%"> <img src="./sun_hot.png" style="width:30%">
+<br>
+Above left: a simulation of a star at approximately 3200K. Above right: a simulation of a star at approximately 4500K.
+</p>
+
+And below is a video of just the sun simulation:
+
+<iframe src="https://drive.google.com/file/d/1ZO1PtC9ElPNYYRDdV1CoQ5Jp9RfLcFMn/preview" width="640" height="480" allow="autoplay"></iframe>
+
 
 ### References
 
