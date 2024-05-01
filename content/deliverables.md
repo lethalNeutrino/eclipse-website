@@ -115,7 +115,7 @@ We also used fractal noise for the star's corona. The main approach was to sampl
 ```
 - When sampling from the noise function, instead of sampling directly based on time, we sampled based on the time minus the distance from the pixel to the star (scaled by a constant). This creates the appearance of the particles of the corona moving outward from the star (as they do in reality), as the last noise sample is only based on the angle (roughly) and time minus distance. 
 ```
-	// i.srcPos.w just contains the current time, we stored it in the position in vert shader to send it to frag shader
+	// i.srcPos.w just contains time, stored in position in vert shader to send to frag shader
     float t = (i.srcPos.w - length(i.srcPos.xyz)) * _Speed; 
 ```
 
@@ -158,3 +158,12 @@ We had a fair amount of learning moments while completing this project.
 
 ### Contributions from each team member
 
+**Everyone** worked on the writeup, as well as bugfixing and the milestone report/other deliverables.
+
+**Aditya** implemented the free camera movement system, along with reworking the prototype corona shader into its final version. He wrote a prototype camera filter that was later replaced. 
+
+**Andy** revamped the initial version of the noise-based sun rendering, making it appear much more realistic and less pixelated. 
+
+**Andrew** created the initial framework for the Unity project. He also wrote the code for the fractal noise function, and added an orbit feature to the camera. He made the initial versions of the sun noise shader and corona shader, and added several camera aftereffects like lens glare/flare + filtering. 
+
+**Eddie** handled all of the moon texturing and shading (and waded through many poorly documented shaders to do so). He also filmed the milestone video.
