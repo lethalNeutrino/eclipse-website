@@ -171,6 +171,11 @@ We had a fair amount of learning moments while completing this project.
 
 ### Results
 
+Below is a static image of the initial state of our simulation, which places the camera at the right distance from the moon and the sun to resemble a total solar eclipse.
+
+<p style="text-align:center">
+<img src="./eclipse.png" style="width:50%">
+</p>
 
 
 ### References
