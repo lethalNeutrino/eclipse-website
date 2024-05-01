@@ -122,18 +122,12 @@ We also used fractal noise for the star's corona. The main approach was to sampl
 #### Challenges
 Though two of our group members had previous Unity experience, it was the other two members' first time using Unity, which was a challenging experience. In particular, writing scripts and shaders was particularly challenging, not only because they were in relatively unfamiliar languages (C# and HLSL), but also because we had to interface with Unity built-ins, of which the documentation was not very helpful at explaining how to use it. Searching for resources online often ended up with looking at long, mostly unhelpful forum threads. Many tasks that were presumed easy ended up being far more time consuming than initially planned.
 
-1. 
+One of these challenges was incorporating the fractal noise generation into our Sun rendering. Namely, while it worked to generate some noise, it did not look very good, as it was super granular and pixelated. We spent a considerable amount of time tuning the parameters and tweaking the algorithm in order to get results that we were satisfied with. 
 
-One of these challenges was
+Another one of these challenges was implementing the corona shader as a billboard. While we initially tried to use pre-existing implementations of billboards, and even tried to follow an opengl tutorial, we found that it did not work for some reason. After fruitless hours of debugging, we decided to implement it ourselves, using a vertex shader to dynamically transform the coordinates of the corners of the plane in world space, such that the normal vector pointed towards the current camera position.
 
-Another one of these challenges was implementing the corona shader as a billboard. 
+Rendering the moon was also a challenge, as Unity did not have a built-in displacement mapping function for objects. We tried to use third-party packages that included displacement mapping, but there were some notable issues, particularly that there was significant distortion of the textures near the poles of the sphere. Thus, we ended up writing our own displacement mapping shader using our knowledge from homework 4.
 
-2. Moon displacement map
-
-
-1. Coming up with the noise functions
-2. Billboard
-3. We struggled with 
 4. HDR
 
 #### Learnings
@@ -158,12 +152,4 @@ We had a fair amount of learning moments while completing this project.
 
 ### Contributions from each team member
 
-**Everyone** worked on the writeup, as well as bugfixing and the milestone report/other deliverables.
-
-**Aditya** implemented the free camera movement system, along with reworking the prototype corona shader into its final version. He wrote a prototype camera filter that was later replaced. 
-
-**Andy** revamped the initial version of the noise-based sun rendering, making it appear much more realistic and less pixelated. 
-
-**Andrew** created the initial framework for the Unity project. He also wrote the code for the fractal noise function, and added an orbit feature to the camera. He made the initial versions of the sun noise shader and corona shader, and added several camera aftereffects like lens glare/flare + filtering. 
-
-**Eddie** handled all of the moon texturing and shading (and waded through many poorly documented shaders to do so). He also filmed the milestone video.
+Aditya worked on setting up the interactive freecam camera system, blackbody radiation shading, and the corona billboard. Andrew worked on setting up the framework, generating the perlin and fractal noise, adding sunspots, and updating the camera system to have controllable speed and orbit mode. Andy worked on adding cellular noise and granules to the sun. Eddie worked on rendering the moon textures displacement, and improving the camera system quality of life. We all contributed to the website, report, and video.
