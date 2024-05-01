@@ -177,6 +177,11 @@ Below is a static image of the initial state of our simulation, which places the
 <img src="./eclipse.png" style="width:50%">
 </p>
 
+Below is an image of the sun without an eclipsing moon:
+
+<p style="text-align:center">
+<img src="./sun_final.png" style="width:50%">
+</p>
 
 ### References
 
