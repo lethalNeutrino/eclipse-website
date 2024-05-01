@@ -12,11 +12,18 @@ mathjax = "tex-mml"
 
 ### Abstract
 
+<<<<<<< HEAD
 Our final project was an interactive demo that renders a star with an orbiting body, with tweakable parameters like star temperature and sunspot frequency, and a free flying camera system that allows you to view things from any perspective. Our goal was to mimic realistic pictures of stars and eclipses, with realtime rendering. We added features such as noise-generated texturing with sunspots, solar corona, blackbody radiation color shifting, camera effects like lens glare/flare, color filters for bright light (handled through HDR), and more. 
 
+=======
+>>>>>>> d7c6e06912a9a86c827676d383e2d102cd37defa
 ### Technical Approach 
 
+
+
 The key component of our approach was Perlin noise. We mostly used HLSL shaders in our code to render both the star and the corona. To add more control over the noise, we implemented fractal noise, where we sampled several octaves of noise with varying frequencies to give different appearances of the noise.
+
+#### Fractal Noise
 
 The basic algorithm we used is as given in the snippet below:
 
@@ -96,7 +103,21 @@ img {
 	</tr>
 </table>
 
+#### Star Base Texture
+
 We then tuned the noise to get our base for the star rendering:
+
+<p style="text-align:center">
+<img src="./base_sun.png" style="width:30%">
+</p>
+
+The exact arguments we used for this are given below:
+```
+float n = (fractal_noise(i.srcPos , 5, _Freq, 0.7) + 1.0) * 0.5;
+```
+In particular, `_Freq` is a user-provided uniform which we defaulted to 8. We also did a bit of extra math to generally brighten the sun a little bit, by taking a weighted average of the `fractal_noise` and `1.0f`.
+
+#### Corona Rendering
 
 We also used fractal noise for the star's corona. The main approach was to sample the noise function based on time and the unit vector pointing from the sun to the pixel we wanted to color, and use the distance from the star to judge how bright the corona should be. (It's necessary to sample on time to make the noise actually change.) However, doing this alone doesn't create a convincing corona; it's too circular, it has lines pointing directly away from the star which looks extremely stiff and unnatural, and it flickers in and out of brightness with no rhyme or reason. In order to fix this, there were two main tricks we used to create something more similar to a real star's corona:
 - We sampled from the noise function (three times, once each for x,y,z) based on the position and time to introduce a jitter to the position of the vertex. This jittered position was then normalized and used to sample again (again with time) to end up with a position jittered roughly with respect to its angle emanating outward from the sun. Finally, we used this position to calculate distance from the sun, and scaled brightness inversely to this distance to make parts of the corona closer to the sun brighter. This handles two of our problems: one, it makes the corona less circular, and two, it gets rid of the straight lines and replaces them with more smooth curves and spikes reminiscent of a real corona.
@@ -118,6 +139,20 @@ We also used fractal noise for the star's corona. The main approach was to sampl
 	// i.srcPos.w just contains time, stored in position in vert shader to send to frag shader
     float t = (i.srcPos.w - length(i.srcPos.xyz)) * _Speed; 
 ```
+
+#### Post-Processing Effects
+
+Additionally, we also used some Unity built-in features to add post processing effects to make our rendering appear more photorealistic to solar photography. We used three main post processing features to accomplish this:
+
+- Bloom
+- Color Filtering
+- Lens Flare
+
+The bloom ended up making our corona effects more realistic by allowing the light emitted from the corona billboard to bleed a little bit over the surface of the moon, especially in the slight deviations due to the height map applied to the moon's surface.
+
+The color filtering was applied to resemble a solar filter, as to make the star more realistic, we heavily increased the brightness of the sun. The filtering, which just decreased brightness globally allowed the features of the sun such as the surface texture to be visible, and also completely darkened the image of the moon, which in our opinion made it look like actual eclipse photography.
+
+Finally, the lens flare effect was added mostly for fun, since a bit of lens flare makes our rendering look nice :)
 
 #### Challenges
 Though two of our group members had previous Unity experience, it was the other two members' first time using Unity, which was a challenging experience. In particular, writing scripts and shaders was particularly challenging, not only because they were in relatively unfamiliar languages (C# and HLSL), but also because we had to interface with Unity built-ins, of which the documentation was not very helpful at explaining how to use it. Searching for resources online often ended up with looking at long, mostly unhelpful forum threads. Many tasks that were presumed easy ended up being far more time consuming than initially planned.
