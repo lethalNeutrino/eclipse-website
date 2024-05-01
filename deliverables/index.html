@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en"  class="theme--light" >
+
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, viewport-fit=cover">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://lethalneutrino.github.io/eclipse-website/images/apple-touch-icon-144x144.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="120x120" href="https://lethalneutrino.github.io/eclipse-website/images/apple-touch-icon-120x120.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="https://lethalneutrino.github.io/eclipse-website/images/apple-touch-icon-72x72.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="57x57" href="https://lethalneutrino.github.io/eclipse-website/images/apple-touch-icon-57x57.png" />
+  <link rel="short icon" href="https://lethalneutrino.github.io/eclipse-website/images/favicon.png" type="image/x-icon" />
+  <link rel="stylesheet" href="https://lethalneutrino.github.io/eclipse-website/style.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" rel="stylesheet">
+  <title> • Final Deliverables</title>
+  
+  
+  
+</head>
+
+<body>
+  <div id="sidebar" class="animated fadeInDown">
+    <div class="logo-title">
+      <div class="title">
+        <img src=https://lethalneutrino.github.io/eclipse-website/images/mirror_cloth.png style="width:80%;" alt="logo" />
+        <h3><a href="https://lethalneutrino.github.io/eclipse-website/"></a></h3>
+        <div class="description">
+          <p></p>
+        </div>
+      </div>
+    </div>
+    <ul class="social-links">
+      
+    </ul>
+    <div class="footer">
+      
+      <span>Designed by </span><a href="https://www.caicai.me">CaiCai</a>
+      
+    </div>
+  </div>
+  <div id="main">
+    <div class="page-top animated fadeInDown">
+      <div class="nav">
+        
+        
+        
+        
+        <li><a  href="https://lethalneutrino.github.io/eclipse-website/">Home</a></li>
+      </div>
+      <div class="information">
+        <div class="back_btn">
+          <a onclick="window.history.go(-1)" ><i
+              class="fas fa-chevron-left"></i></a>
+        </div>
+        
+        
+        
+      </div>
+    </div>
+    <div class="autopagerize_page_element">
+      <div class="content">
+        
+<article class="post animated fadeInDown">
+  <h1><a href="https:&#x2F;&#x2F;lethalneutrino.github.io&#x2F;eclipse-website&#x2F;deliverables&#x2F;">Final Deliverables</a></h1>
+  
+  <div class="post-content"><h1 id="eclipse-rendering">Eclipse Rendering</h1>
+<h2 id="aditya-baireddy-andy-chen-andrew-liu-eddie-park">Aditya Baireddy, Andy Chen, Andrew Liu, Eddie Park</h2>
+<h3 id="abstract">Abstract</h3>
+<p>Our final project was an interactive demo that renders a star with an orbiting body, with tweakable parameters like star temperature and sunspot frequency, and a free flying camera system that allows you to view things from any perspective. Our goal was to mimic realistic pictures of stars and eclipses, with realtime rendering. We added features such as noise-generated texturing with sunspots, solar corona, blackbody radiation color shifting, camera effects like bloom and lens glare, color filters for bright light (handled through HDR), and more. </p>
+<h3 id="technical-approach">Technical Approach</h3>
+<p>Most of this project followed the steps in the blog post <em>Seeds of Andromeda</em> in our citations. Although we started from a blank Unity project, we relied heavily on the details provided in the blog to help us generate our simulation. Although the general structure of the implementation was similar, we ended up taking some differing design choices, such as using HLSL as opposed to GLSL, as well as using the Unity rendering pipeline, and manually implementing billboarding.</p>
+<p>The key component of our approach was Perlin noise. We mostly used HLSL shaders in our code to render both the star and the corona. To add more control over the noise, we implemented fractal noise, where we sampled several octaves of noise with varying frequencies to give different appearances of the noise.</p>
+<h4 id="fractal-noise">Fractal Noise</h4>
+<p>The basic algorithm we used is as given in the snippet below:</p>
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>float fractal_noise(float4 position, int octaves, float frequency, float persistence) {
+</span><span>	// Sum of all octaves
+</span><span>	float total = 0.0;
+</span><span>	
+</span><span>	// Maximum possible value, used for normalization
+</span><span>	float maxAmplitude = 0.0;
+</span><span>	
+</span><span>	// Current noise amplitude
+</span><span>	float amplitude = 1.0;
+</span><span>
+</span><span>	// Sample Perlin noise OCTAVES number of times
+</span><span>	for(int i = 0; i &lt; octaves; i++) {
+</span><span>		total += snoise(position * frequency) * amplitude;
+</span><span>		
+</span><span>		// Double the frequency
+</span><span>		frequency *= 2;
+</span><span>		maxAmplitude += amplitude;
+</span><span>		
+</span><span>		// Reduce the amplitude
+</span><span>		amplitude *= persistence;
+</span><span>	}
+</span><span>
+</span><span>	return total / maxAmplitude;
+</span><span>}
+</span></code></pre>
+<p>To smoothly vary our noise textures across not just the surface of the star, but also through time, we used a 4-dimensional position vector, where the 4th coordinate denoted time. Below is a comparison of the noise shader applied to a plane with varying parameters:</p>
+<style>
+img {
+  margin-left: auto;
+  margin-right: auto;
+}
+</style>
+<table>
+	<tr>
+		<th style="width:10%"> </th>
+		<th> 1 Octave </th>
+		<th> 2 Octaves </th>
+		<th> 4 Octaves </th>
+		<th> 20 Octaves </th>
+	</tr>
+	<tr>
+		<td> <p style="text-align:center"> Frequency = 0.1 <br> Persistence = 0.7 </p> </td>
+		<td> <img src="./fractal_noise_1o_0.1f_0.7p.png"> </td>
+		<td> <img src="./fractal_noise_2o_0.1f_0.7p.png"> </td>
+		<td> <img src="./fractal_noise_4o_0.1f_0.7p.png"> </td>
+		<td> <img src="./fractal_noise_20o_0.1f_0.7p.png"> </td>
+	</tr>
+	<tr>
+		<td> <p style="text-align:center"> Frequency = 0.5 <br> Persistence = 0.7 </p> </td>
+		<td> <img src="./fractal_noise_1o_0.5f_0.7p.png"> </td>
+		<td> <img src="./fractal_noise_2o_0.5f_0.7p.png"> </td>
+		<td> <img src="./fractal_noise_4o_0.5f_0.7p.png"> </td>
+		<td> <img src="./fractal_noise_20o_0.5f_0.7p.png"> </td>
+	</tr>
+	<tr>
+		<td> <p style="text-align:center"> Frequency = 0.1 <br> Persistence = 0.1 </p> </td>
+		<td> <img src="./fractal_noise_1o_0.1f_0.1p.png"> </td>
+		<td> <img src="./fractal_noise_2o_0.1f_0.1p.png"> </td>
+		<td> <img src="./fractal_noise_4o_0.1f_0.1p.png"> </td>
+		<td> <img src="./fractal_noise_20o_0.1f_0.1p.png"> </td>
+	</tr>
+	<tr>
+		<td> <p style="text-align:center"> Frequency = 0.1 <br> Persistence = 0.9 </p> </td>
+		<td> <img src="./fractal_noise_1o_0.1f_0.9p.png"> </td>
+		<td> <img src="./fractal_noise_2o_0.1f_0.9p.png"> </td>
+		<td> <img src="./fractal_noise_4o_0.1f_0.9p.png"> </td>
+		<td> <img src="./fractal_noise_20o_0.1f_0.9p.png"> </td>
+	</tr>
+</table>
+<h4 id="star-base-texture">Star Base Texture</h4>
+<p>We then tuned the noise to get our base for the star rendering:</p>
+<p style="text-align:center">
+<img src="./base_sun.png" style="width:30%">
+</p>
+<p>The exact arguments we used for this are given below:</p>
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>float n = (fractal_noise(i.srcPos , 5, _Freq, 0.7) + 1.0) * 0.5;
+</span></code></pre>
+<p>In particular, <code>_Freq</code> is a user-provided uniform which we defaulted to 8. We also did a bit of extra math to generally brighten the sun a little bit, by taking a weighted average of the <code>fractal_noise</code> and <code>1.0f</code>.</p>
+<h4 id="extra-star-texture-additions">Extra Star Texture Additions</h4>
+<p>The base texture for our star has the same temperature (given as a parameter) for every point in the star, resulting in the same color 
+(just with brightening and darkening based on fractal noise) for all points on the star. This is not very photorealistic, since 
+photographs of the sun show some variation between red, orange, yellow, and white. This is present on both a large and small scale 
+level. At the large scale level, it can be seen in photographs of the sun that some large chunks have a different color than 
+surrounding areas (likely due to hotter or cooler temperatures). At the small scale level, it can be seen that there are micro 
+variations between red/orange/yellow, and looks kind of &quot;spotty&quot;. This was implemented in the shader by adding two types of noise: 
+gradient noise and cellular noise.</p>
+<p>Without any additional noise:</p>
+<p style="text-align:center">
+<img src="./nothing_sun.png" style="width:30%">
+</p>
+<p>The negative of cellular noise was added to the temperature to simulate variations in color at a small scale level. Cellular noise 
+is noise that resembles cells, where the visual effect is the coordinate space being partitioned into multiple &quot;cells&quot; which have 
+a clear barrier on the outside, and are brighter closer to the center of the cell. The negative of this noise was added to make a 
+faint cell structure where the boundaries are higher temperature/brighter (yellow) and the inside is lower temperature (red).</p>
+<p>With only cellular noise on top of the base texture:</p>
+<p style="text-align:center">
+<img src="./cellular_sun.png" style="width:30%">
+</p>
+<p>Gradient noise (scaled by an appropriate factor) was added to the temperature to simulate variations in color for large chunks. 
+Gradient noise when scaled by an appropriate factor can be used to have shading that looks like &quot;splatters&quot; where there is a 
+gradual transition between the color on the outside of the splatter to the color of the splatter. For the sun, the &quot;splatters&quot; were 
+low (or high) temperatures, and produced a gradual transition between red-orange to yellow-orange, for example.</p>
+<p>With gradient noise and cellular noise on top of the base texture:</p>
+<p style="text-align:center">
+<img src="./nice_sun.png" style="width:30%">
+</p>
+#### Sunspots
+<p>We used the below code snippet of code to generate our sunspots.</p>
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>float s = 0.3;
+</span><span>float t1 = snoise(sPosition * _ssFreq) - s;
+</span><span>float t2 = snoise((sPosition + _Radius) * _ssFreq) - s;
+</span><span>float ss = (max(t1, 0.0) * max(t2, 0.0)) * 2.0;
+</span><span>
+</span><span>// Accumulate total noise
+</span><span>float total = n - ss;
+</span></code></pre>
+<p>This code uses more perlin noise, albeit at a lower frequency (<code>_ssFreq</code> denotes the sunspot frequency uniform), and subtracting this from our total to create dark spots on the surface of the star. The purpose of the <code>t2</code> parameter along with the <code>_Radius</code> parameter was to properly adjust the sunspots based on real stars. Sunspots in stars tend to be the same size, but larger stars have more sunspots. To emulate this, we simulated more but smaller sunspots on larger stars. For images of sunspots, see the results section below.</p>
+<h4 id="blackbody-radiation-and-color-shifting">Blackbody Radiation and Color Shifting</h4>
+<p>The noise-based rendering only gives the brightness of the light, but using some physics it's possible to compute the color of the light based on the temperature of the star. There are two components that need to be accounted for: the actual color of the blackbody radiation itself, and the change in intensity. The formula for computing blackbody radiation wavelength strength is given by</p>
+<p>$$\displaystyle B_{\lambda }(\lambda ,T)={\frac {2hc^{2}}{\lambda ^{5}}}{\frac {1}{e^{ hc / (\lambda k_{\mathrm {B} }T)}-1}}$$</p>
+<p>where $T$ is temperature and $\lambda$ is the desired wavelength. Computing this in real time with graphics is possible, but a little complicated with shaders because of the size of the numbers involved, and because the color gamut of the display is not necessarily known in advance, so figuring out what wavelengths exactly to use for each of the red, green, and blue LEDs is somewhat of a guessing game by the time we get to the shader. Instead, we used a texture that computed the color based on temperature in advance, and merely sampled from it based on an input temperature, which is both faster and easier.</p>
+<p>For the intensity, we were still facing some similar shader issues as with color, so we again used a workaround: we approximated the increase in intensity for each color by some &quot;magic&quot; linear equations, shown below along with the total color obtained from the blackbody radiation code:</p>
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>// some linear interpolation of temperature to read from the temperature texture, 
+</span><span>// which handles between 800 K and 30,000 K
+</span><span>float u = (_Temp - 800.0) / 29200.0;
+</span><span>float4 color = tex2D(_TempTex, float2(u, 0));
+</span><span>// this code is refactored here to be easier to read
+</span><span>float colorRedShift = _Temp * (0.0534 / 255.0) - (43.0/255.0);
+</span><span>float colorGreenShift = _Temp * (0.0628 / 255.0) - (77.0 / 255.0);
+</span><span>float colorBlueShift = _Temp * (0.0735/255.0) - (115.0/255.0);
+</span><span>float4 tempColorShift = float4(colorRedShift,colorGreenShift,colorBlueShift,1.0);
+</span><span>return float4(total, total, total, 1) * shiftedColor;
+</span></code></pre>
+<p><code>_Temp</code> is the input temperature, and <code>total</code> is the brightness computed by the noise functions as described earlier.</p>
+<h4 id="corona-rendering">Corona Rendering</h4>
+<p>We also used fractal noise for the star's corona. The main approach was to sample the noise function based on time and the unit vector pointing from the sun to the pixel we wanted to color, and use the distance from the star to judge how bright the corona should be. (It's necessary to sample on time to make the noise actually change.) However, doing this alone doesn't create a convincing corona; it's too circular, it has lines pointing directly away from the star which looks extremely stiff and unnatural, and it flickers in and out of brightness with no rhyme or reason. In order to fix this, there were two main tricks we used to create something more similar to a real star's corona:</p>
+<ul>
+<li>We sampled from the noise function (three times, once each for x,y,z) based on the position and time to introduce a jitter to the position of the vertex. This jittered position was then normalized and used to sample again (again with time) to end up with a position jittered roughly with respect to its angle emanating outward from the sun. Finally, we used this position to calculate distance from the sun, and scaled brightness inversely to this distance to make parts of the corona closer to the sun brighter. This handles two of our problems: one, it makes the corona less circular, and two, it gets rid of the straight lines and replaces them with more smooth curves and spikes reminiscent of a real corona.</li>
+</ul>
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>	// generate jittered position by jittering each coordinate
+</span><span>	float sx = snoise(_Freq * float4(i.srcPos.xyz, t));
+</span><span>	float sy = snoise(_Freq * float4((i.srcPos.xyz + 2000.0), t));
+</span><span>	float sz = snoise(_Freq * float4((i.srcPos.xyz + 4000.0), t));
+</span><span>	float3 jitter = float3(sx,sy,sz) * 0.12; 
+</span><span>
+</span><span>	// normalize jittered position to get a noisy angle
+</span><span>	float3 nJitterDist = normalize(i.srcPos.xyz + jitter);
+</span><span>
+</span><span>	// use noisy angle to find noisy position based on angle
+</span><span>	float3 position = i.srcPos.xyz + snoise(float4(nJitterDist, t * _Thickness)/_Thickness) * .2;
+</span></code></pre>
+<ul>
+<li>When sampling from the noise function, instead of sampling directly based on time, we sampled based on the time minus the distance from the pixel to the star (scaled by a constant). This creates the appearance of the particles of the corona moving outward from the star (as they do in reality), as the last noise sample is only based on the angle (roughly) and time minus distance. </li>
+</ul>
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>	// i.srcPos.w just contains time, stored in position in vert shader to send to frag shader
+</span><span>    float t = (i.srcPos.w - length(i.srcPos.xyz)) * _Speed; 
+</span></code></pre>
+<h4 id="post-processing-effects">Post-Processing Effects</h4>
+<p>Additionally, we also used some Unity built-in features to add post processing effects to make our rendering appear more photorealistic to solar photography. We used three main post processing features to accomplish this:</p>
+<ul>
+<li>Bloom</li>
+<li>Color Filtering</li>
+<li>Lens Flare</li>
+</ul>
+<p>The bloom ended up making our corona effects more realistic by allowing the light emitted from the corona billboard to bleed a little bit over the surface of the moon, especially in the slight deviations due to the height map applied to the moon's surface.</p>
+<p>The color filtering was applied to resemble a solar filter, as to make the star more realistic, we heavily increased the brightness of the sun. The filtering, which just decreased brightness globally allowed the features of the sun such as the surface texture to be visible, and also completely darkened the image of the moon, which in our opinion made it look like actual eclipse photography.</p>
+<p>Finally, the lens flare effect was added mostly for fun, since a bit of lens flare makes our rendering look nice :)</p>
+<h4 id="challenges">Challenges</h4>
+<p>Though two of our group members had previous Unity experience, it was the other two members' first time using Unity, which was a challenging experience. In particular, writing scripts and shaders was particularly challenging, not only because they were in relatively unfamiliar languages (C# and HLSL), but also because we had to interface with Unity built-ins, of which the documentation was not very helpful at explaining how to use it. Searching for resources online often ended up with looking at long, mostly unhelpful forum threads. Many tasks that were presumed easy ended up being far more time consuming than initially planned.</p>
+<p>One of these challenges was incorporating the fractal noise generation into our Sun rendering. Namely, while it worked to generate some noise, it did not look very good, as it was super granular and pixelated. We spent a considerable amount of time tuning the parameters and tweaking the algorithm in order to get results that we were satisfied with. </p>
+<p>Another one of these challenges was implementing the corona shader as a billboard. While we initially tried to use pre-existing implementations of billboards, and even tried to follow an opengl tutorial, we found that it did not work for some reason. After fruitless hours of debugging, we decided to implement it ourselves, using a vertex shader to dynamically transform the coordinates of the corners of the plane in world space, such that the normal vector pointed towards the current camera position.</p>
+<p>Rendering the moon was also a challenge, as Unity did not have a built-in displacement mapping function for objects. We tried to use third-party packages that included displacement mapping, but there were some notable issues, particularly that there was significant distortion of the textures near the poles of the sphere. Thus, we ended up writing our own displacement mapping shader using our knowledge from homework 4.</p>
+<p>We also had trouble with getting HDR rendering to work: originally, we added HDR directly to the shaders we wrote, but this didn't play well with Unity and our implementation of color filtering, making the scene appear much darker than it should. There wasn't an easy workaround for this, since we were planning to use an in-scene translucent filter to shift down color, but at that point the pixel values were written to the screen buffer by the shader. The solution was to introduce a volume around the Sun which filtered some light out (while remaining in the HDR range), and use post-processing effects for the color filter which played nicely with the HDR rendering.</p>
+<h4 id="learnings">Learnings</h4>
+<p>We had a fair amount of learning moments while completing this project.</p>
+<ol>
+<li>It was far easier for us to do partner programming on one computer than to try to work separately on our own computers. We initially tried to work separately, but found that we encountered lots of unintelligible merge conflicts, and ended up having to do a bunch of work again transferring the results from one computer to another.</li>
+<li>Choosing the right parameters (frequency, strength, radius, temperature, size, thickness, etc.) is really important for rendering images that look good. Choosing the wrong values for these parameters can lead to results that look really weird.</li>
+<li>While we ended up sticking with Unity for this project, we were ultimately unhappy with the framework and felt that it would've been easier to operate in C++ by perhaps modifying one of the homework skeleton codes.</li>
+</ol>
+<h3 id="results">Results</h3>
+<p>Below is a static image of the initial state of our simulation, which places the camera at the right distance from the moon and the sun to resemble a total solar eclipse.</p>
+<p style="text-align:center">
+<img src="./eclipse.png" style="width:50%">
+</p>
+<p>Below is an image of the sun without an eclipsing moon:</p>
+<p style="text-align:center">
+<img src="./sun_final.png" style="width:50%">
+</p>
+<p>In addition, by modifying the distance between the camera and the scene, we are able to simulate an annular eclipse, and by rotating the camera around the sun, we are able to simulate a partial eclipse:</p>
+<p style="text-align:center">
+<img src="./sun_annular.png" style="width:30%"> <img src="./sun_partial.png" style="width:30%">
+<br>
+Above left: a simulation of an annular eclipse. Above right: a simulation of a partial eclipse
+</p>
+<p>Below is an example of two different star temperatures, demonstrating blackbody radiation.</p>
+<p style="text-align:center">
+<img src="./sun_warmer.png" style="width:30%"> <img src="./sun_hot.png" style="width:30%">
+<br>
+Above left: a simulation of a star at approximately 3200K. Above right: a simulation of a star at approximately 4500K.
+</p>
+<p>And below is a video of just the sun simulation:</p>
+<iframe src="https://drive.google.com/file/d/1ZO1PtC9ElPNYYRDdV1CoQ5Jp9RfLcFMn/preview" width="640" height="480" allow="autoplay"></iframe>
+<h3 id="moon-texture">Moon Texture</h3>
+<p>In the main eclipse renderings, we opted to shoot for a more photorealistic result, where the camera had a solar filter which causes the moon to appear pitch black. However in this image, we manually increased the brightness of the Moon to demonstrate the texturing of the Moon. We applied a displacement map onto the moon, though due to the displacement scale, it is not immediately apparent.</p>
+<p style="text-align:center">
+<img src="./moon_texture_demo.png" style="width:30%"> <img src="./moon_displacement.png" style="width:30%">
+<br>
+Above left: the texture of the moon, with brightness manually increased. Above right: the displaced mesh of the moon.
+</p>
+<h3 id="deliverable-video">Deliverable Video</h3>
+<iframe src="https://drive.google.com/file/d/1hW5jzforOLcZgpmrHi9ynKMa8VO7BY5i/preview" width="640" height="480" allow="autoplay"></iframe>
+<p>Slides used in the presentation (berkeley dot edu account required):
+<a href="https://docs.google.com/presentation/d/19kLU-L7-MMxgaKtwYwKvchTDfSHwOQKX_LohvK8FFuE/edit?usp=sharing">link</a></p>
+<h3 id="references">References</h3>
+<ol>
+<li>Procedural Star Rendering. Benjamin Arnold, Seed of Andromeda. https://web.archive.org/web/20150910041136/https://www.seedofandromeda.com/blogs/51-procedural-star-rendering.</li>
+<li>2D / 3D / 4D optimised Perlin Noise Cg/HLSL library (cginc). https://forum.unity.com/threads/2d-3d-4d-optimised-perlin-noise-cg-hlsl-library-cginc.218372/.</li>
+<li>What color is a blackbody? Mitchell Charity. http://www.vendian.org/mncharity/dir3/blackbody/.</li>
+<li>CGI Moon Kit. Ernie Wright, Nasa's Scientific Visualization Studio. https://svs.gsfc.nasa.gov/cgi-bin/details.cgi?aid=4720.</li>
+<li>Billboards. OpenGL-Tutorial. https://www.opengl-tutorial.org/intermediate-tutorials/billboards-particles/billboards/</li>
+</ol>
+<h3 id="contributions-from-each-team-member">Contributions from each team member</h3>
+<p>Aditya worked on setting up the interactive freecam camera system, blackbody radiation shading, and the corona billboard. Andrew worked on setting up the framework, generating the perlin and fractal noise, adding sunspots, and updating the camera system to have controllable speed and orbit mode. Andy worked on adding cellular noise and granules to the sun. Eddie worked on rendering the moon textures displacement, and improving the camera system quality of life. We all contributed to the website, report, and video.</p>
+</div>
+  <div class="post-footer">
+    <div class="meta">
+      <div class="info">
+        
+        <i class="far fa-sun"></i><span class="date">2024-04-30</span>
+        
+        
+      </div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script>
+  MathJax = {
+    tex: {
+      displayMath: [['$$', '$$'], ["\\[", "\\]"]],
+      inlineMath: [['$', '$'], ['\\(', '\\)']]
+    }
+  };
+</script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+  </script>
+
+
+
+
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    function showLanguages() {
+      let currentDisplay = document.getElementById("languages").style.display;
+      if (currentDisplay == 'none') {
+        document.getElementById("languages").style.display = 'block';
+      } else {
+        document.getElementById("languages").style.display = 'none';
+      }
+    }
+  </script>
+</body>
+
+</html>
