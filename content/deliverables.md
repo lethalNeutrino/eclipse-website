@@ -96,8 +96,11 @@ img {
 	</tr>
 </table>
 
-We then tuned the 
+We then tuned the noise to get our base for the star rendering:
 
+### References
+
+[Seed of Andromeda Blog Post (Archive)](https://web.archive.org/web/20150910041136/https://www.seedofandromeda.com/blogs/51-procedural-star-rendering)
 ### Preliminary results
 Here is a video of us detailing our progress so far:
 <iframe src="https://drive.google.com/file/d/1qG3P6DkMyDPRBvkbKj1j6rZBin0__Sis/preview" width="640" height="480" allow="autoplay"></iframe>
@@ -105,51 +108,3 @@ Here is a video of us detailing our progress so far:
 Here are our project milestone slides (berkeley dot edu account required):
 [link](https://docs.google.com/presentation/d/1D1iDlvEi04ZeOGGfWA8Nlf4K3nUhdPnpQOIle3osOLY/edit?usp=sharing)
 
-### Reflections on plan progress
-We're pretty on progress with our outlined plan, so we think that work has been split up through the weeks pretty well.
-Trying to do version control through Git and Unity caused us some headaches; we're considering changing our framework for the project, but we've yet to decide one way or another.
-Writing the shaders took a little longer than expected, but nothing too bad.
-Overall, our progress is pretty much exactly in line with what our plan was, so we think we're in a good state.
-
-### Updated work plan
-Here, we present our original project schedule, with the completed items crossed out:
-
-Week 1 - 4/9
-- ~~Application setup~~
-- ~~Camera system~~
-- ~~Sphere rendering~~
-- ~~Noise functions~~
-
-Week 2 - 4/16
-- ~~Blackbod6 radiation~~
-- ~~Corona~~
-- Atmospheric effects
-
-Week 3 - 4/23
-- Eclipse simulation
-
-Week 4 - 4/30
-- Debugging + Finishing touches
-
-Here, we present an updated project schedule, taking into account our progress so far:
-
-Week 1 - 4/9
-- ~~Application setup~~
-- ~~Camera system~~
-- ~~Sphere rendering~~
-- ~~Noise functions~~
-
-Week 2 - 4/16
-- ~~Blackbody radiation~~
-- ~~Corona~~
-
-Week 3 - 4/23
-- Re-examination of framework
-- Atmospheric effects + solar flares
-- Moon modeling + eclipse effects
-
-Week 4 - 4/30
-- Camera pathing
-- UI features
-- Debugging + finishing touches
-- Project writeups + deliverables
