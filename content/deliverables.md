@@ -181,7 +181,7 @@ Another one of these challenges was implementing the corona shader as a billboar
 
 Rendering the moon was also a challenge, as Unity did not have a built-in displacement mapping function for objects. We tried to use third-party packages that included displacement mapping, but there were some notable issues, particularly that there was significant distortion of the textures near the poles of the sphere. Thus, we ended up writing our own displacement mapping shader using our knowledge from homework 4.
 
-4. HDR
+We also had trouble with getting HDR rendering to work: originally, we added HDR directly to the shaders we wrote, but this didn't play well with Unity and our implementation of color filtering, making the scene appear much darker than it should. There wasn't an easy workaround for this, since we were planning to use an in-scene translucent filter to shift down color, but at that point the pixel values were written to the screen buffer by the shader. The solution was to introduce a volume around the Sun which filtered some light out (while remaining in the HDR range), and use post-processing effects for the color filter which played nicely with the HDR rendering.
 
 #### Learnings
 We had a fair amount of learning moments while completing this project.
