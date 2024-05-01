@@ -114,6 +114,29 @@ float n = (fractal_noise(i.srcPos , 5, _Freq, 0.7) + 1.0) * 0.5;
 ```
 In particular, `_Freq` is a user-provided uniform which we defaulted to 8. We also did a bit of extra math to generally brighten the sun a little bit, by taking a weighted average of the `fractal_noise` and `1.0f`.
 
+#### Blackbody Radiation and Color Shifting
+The noise-based rendering only gives the brightness of the light, but using some physics it's possible to compute the color of the light based on the temperature of the star. There are two components that need to be accounted for: the actual color of the blackbody radiation itself, and the change in intensity. The formula for computing blackbody radiation wavelength strength is given by
+
+$$\displaystyle B_{\lambda }(\lambda ,T)={\frac {2hc^{2}}{\lambda ^{5}}}{\frac {1}{e^{ hc / (\lambda k_{\mathrm {B} }T)}-1}}$$
+
+where $T$ is temperature and $\lambda$ is the desired wavelength. Computing this in real time with graphics is possible, but a little complicated with shaders because of the size of the numbers involved, and because the color gamut of the display is not necessarily known in advance, so figuring out what wavelengths exactly to use for each of the red, green, and blue LEDs is somewhat of a guessing game by the time we get to the shader. Instead, we used a texture that computed the color based on temperature in advance, and merely sampled from it based on an input temperature, which is both faster and easier.
+
+For the intensity, we were still facing some similar shader issues as with color, so we again used a workaround: we approximated the increase in intensity for each color by some "magic" linear equations, shown below along with the total color obtained from the blackbody radiation code:
+```	
+// some linear interpolation of temperature to read from the temperature texture, 
+// which handles between 800 K and 30,000 K
+float u = (_Temp - 800.0) / 29200.0;
+float4 color = tex2D(_TempTex, float2(u, 0));
+// this code is refactored here to be easier to read
+float colorRedShift = _Temp * (0.0534 / 255.0) - (43.0/255.0);
+float colorGreenShift = _Temp * (0.0628 / 255.0) - (77.0 / 255.0);
+float colorBlueShift = _Temp * (0.0735/255.0) - (115.0/255.0);
+float4 tempColorShift = float4(colorRedShift,colorGreenShift,colorBlueShift,1.0);
+return float4(total, total, total, 1) * shiftedColor;
+```
+
+`_Temp` is the input temperature, and `total` is the brightness computed by the noise functions as described earlier.
+
 #### Corona Rendering
 
 We also used fractal noise for the star's corona. The main approach was to sample the noise function based on time and the unit vector pointing from the sun to the pixel we wanted to color, and use the distance from the star to judge how bright the corona should be. (It's necessary to sample on time to make the noise actually change.) However, doing this alone doesn't create a convincing corona; it's too circular, it has lines pointing directly away from the star which looks extremely stiff and unnatural, and it flickers in and out of brightness with no rhyme or reason. In order to fix this, there were two main tricks we used to create something more similar to a real star's corona:
