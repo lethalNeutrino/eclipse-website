@@ -276,7 +276,7 @@ And below is a video of just the sun simulation:
 
 <iframe src="https://drive.google.com/file/d/1ZO1PtC9ElPNYYRDdV1CoQ5Jp9RfLcFMn/preview" width="640" height="480" allow="autoplay"></iframe>
 
-### Moon Texture:
+### Moon Texture
 
 In this image, we manually increased the brightness of the Moon to demonstrate the texturing of the Moon.
 
