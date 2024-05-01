@@ -191,6 +191,15 @@ In addition, by modifying the distance between the camera and the scene, we are 
 Above left: a simulation of an annular eclipse. Above right: a simulation of a partial eclipse
 </p>
 
+Below is an example of two different star temperatures, demonstrating blackbody radiation.
+
+<p style="text-align:center">
+<img src="./sun_warmer.png" style="width:40%">
+<img src="./sun_hot.png" style="width:40%">
+Above left: a simulation of a star at approximately 3200K. Above right: a simulation of a star at approximately 4500K.
+</p>
+
+
 
 ### References
 
