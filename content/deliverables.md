@@ -12,7 +12,7 @@ mathjax = "tex-mml"
 
 ### Abstract
 
-
+Our final project was an interactive demo that renders a star with an orbiting body, with tweakable parameters like star temperature and sunspot frequency, and a free flying camera system that allows you to view things from any perspective. Our goal was to mimic realistic pictures of stars and eclipses, with realtime rendering. We added features such as noise-generated texturing with sunspots, solar corona, blackbody radiation color shifting, camera effects like lens glare/flare, color filters for bright light (handled through HDR), and more. 
 
 ### Technical Approach 
 
