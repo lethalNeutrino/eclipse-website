@@ -183,6 +183,15 @@ Below is an image of the sun without an eclipsing moon:
 <img src="./sun_final.png" style="width:50%">
 </p>
 
+In addition, by modifying the distance between the camera and the scene, we are able to simulate an annular eclipse, and by rotating the camera around the sun, we are able to simulate a partial eclipse:
+
+<p style="text-align:center">
+<img src="./sun_annular.png" style="width:40%">
+<img src="./sun_partial.png" style="width:40%">
+Above left: a simulation of an annular eclipse. Above right: a simulation of a partial eclipse
+</p>
+
+
 ### References
 
 1. Procedural Star Rendering. Benjamin Arnold, Seed of Andromeda. https://web.archive.org/web/20150910041136/https://www.seedofandromeda.com/blogs/51-procedural-star-rendering.
