@@ -125,7 +125,7 @@ gradient noise and cellular noise.
 Without any additional noise:
 
 <p style="text-align:center">
-<img src="../nothing_sun.png" style="width:30%">
+<img src="./nothing_sun.png" style="width:30%">
 </p>
 
 The negative of cellular noise was added to the temperature to simulate variations in color at a small scale level. Cellular noise 
@@ -136,7 +136,7 @@ faint cell structure where the boundaries are higher temperature/brighter (yello
 With only cellular noise on top of the base texture:
 
 <p style="text-align:center">
-<img src="../cellular_sun.png" style="width:30%">
+<img src="./cellular_sun.png" style="width:30%">
 </p>
 
 Gradient noise (scaled by an appropriate factor) was added to the temperature to simulate variations in color for large chunks. 
@@ -147,7 +147,7 @@ low (or high) temperatures, and produced a gradual transition between red-orange
 With gradient noise and cellular noise on top of the base texture:
 
 <p style="text-align:center">
-<img src="../nice_sun.png" style="width:30%">
+<img src="./nice_sun.png" style="width:30%">
 </p>
 #### Sunspots
 
