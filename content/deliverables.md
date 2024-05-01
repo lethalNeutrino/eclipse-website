@@ -278,10 +278,12 @@ And below is a video of just the sun simulation:
 
 ### Moon Texture
 
-In this image, we manually increased the brightness of the Moon to demonstrate the texturing of the Moon.
+In the main eclipse renderings, we opted to shoot for a more photorealistic result, where the camera had a solar filter which causes the moon to appear pitch black. However in this image, we manually increased the brightness of the Moon to demonstrate the texturing of the Moon. We applied a displacement map onto the moon, though due to the displacement scale, it is not immediately apparent.   
 
 <p style="text-align:center">
-<img src="./moon_texture_demo.png" style="width:30%">
+<img src="./moon_texture_demo.png" style="width:30%"> <img src="./moon_displacement.png" style="width:30%">
+<br>
+Above left: the texture of the moon, with brightness manually increased. Above right: the displaced mesh of the moon.
 </p>
 
 ### References
