@@ -220,6 +220,9 @@ Below is an example of two different star temperatures, demonstrating blackbody 
 Above left: a simulation of a star at approximately 3200K. Above right: a simulation of a star at approximately 4500K.
 </p>
 
+And below is a video of just the sun simulation:
+
+<iframe src="https://drive.google.com/file/d/1ZO1PtC9ElPNYYRDdV1CoQ5Jp9RfLcFMn/preview" width="640" height="480" allow="autoplay"></iframe>
 
 
 ### References
