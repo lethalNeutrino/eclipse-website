@@ -119,15 +119,42 @@ We also used fractal noise for the star's corona. The main approach was to sampl
     float t = (i.srcPos.w - length(i.srcPos.xyz)) * _Speed; 
 ```
 
+#### Challenges
+Though two of our group members had previous Unity experience, it was the other two members' first time using Unity, which was a challenging experience. In particular, writing scripts and shaders was particularly challenging, not only because they were in relatively unfamiliar languages (C# and HLSL), but also because we had to interface with Unity built-ins, of which the documentation was not very helpful at explaining how to use it. Searching for resources online often ended up with looking at long, mostly unhelpful forum threads. Many tasks that were presumed easy ended up being far more time consuming than initially planned.
+
+1. 
+
+One of these challenges was
+
+Another one of these challenges was implementing the corona shader as a billboard. 
+
+2. Moon displacement map
+
+
+1. Coming up with the noise functions
+2. Billboard
+3. We struggled with 
+4. HDR
+
+#### Learnings
+We had a fair amount of learning moments while completing this project.
+1. It was far easier for us to do partner programming on one computer than to try to work separately on our own computers. We initially tried to work separately, but found that we encountered lots of unintelligible merge conflicts, and ended up having to do a bunch of work again transferring the results from one computer to another.
+2. Choosing the right parameters (frequency, strength, radius, temperature, size, thickness, etc.) is really important for rendering images that look good. Choosing the wrong values for these parameters can lead to results that look really weird.
+3. While we ended up sticking with Unity for this project, we were ultimately unhappy with the framework and felt that it would've been easier to operate in C++ by perhaps modifying one of the homework skeleton codes.
+
+
+### Results
+
 
 
 ### References
 
-[Seed of Andromeda Blog Post (Archive)](https://web.archive.org/web/20150910041136/https://www.seedofandromeda.com/blogs/51-procedural-star-rendering)
-### Preliminary results
-Here is a video of us detailing our progress so far:
-<iframe src="https://drive.google.com/file/d/1qG3P6DkMyDPRBvkbKj1j6rZBin0__Sis/preview" width="640" height="480" allow="autoplay"></iframe>
+1. Procedural Star Rendering. Benjamin Arnold, Seed of Andromeda. https://web.archive.org/web/20150910041136/https://www.seedofandromeda.com/blogs/51-procedural-star-rendering.
+2. 2D / 3D / 4D optimised Perlin Noise Cg/HLSL library (cginc). https://forum.unity.com/threads/2d-3d-4d-optimised-perlin-noise-cg-hlsl-library-cginc.218372/.
+3. What color is a blackbody? Mitchell Charity. http://www.vendian.org/mncharity/dir3/blackbody/.
+4. CGI Moon Kit. Ernie Wright, Nasa's Scientific Visualization Studio. https://svs.gsfc.nasa.gov/cgi-bin/details.cgi?aid=4720.
+5. Billboards. OpenGL-Tutorial. https://www.opengl-tutorial.org/intermediate-tutorials/billboards-particles/billboards/
 
-Here are our project milestone slides (berkeley dot edu account required):
-[link](https://docs.google.com/presentation/d/1D1iDlvEi04ZeOGGfWA8Nlf4K3nUhdPnpQOIle3osOLY/edit?usp=sharing)
+
+### Contributions from each team member
 
