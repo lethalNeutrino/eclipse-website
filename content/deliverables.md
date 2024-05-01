@@ -16,7 +16,7 @@ Our final project was an interactive demo that renders a star with an orbiting b
 
 ### Technical Approach 
 
-
+Most of this project followed the steps in the blog post *Seeds of Andromeda* in our citations. Although we started from a blank Unity project, we relied heavily on the details provided in the blog to help us generate our simulation. Although the general structure of the implementation was similar, we ended up taking some differing design choices, such as using HLSL as opposed to GLSL, as well as using the Unity rendering pipeline, and manually implementing billboarding.   
 
 The key component of our approach was Perlin noise. We mostly used HLSL shaders in our code to render both the star and the corona. To add more control over the noise, we implemented fractal noise, where we sampled several octaves of noise with varying frequencies to give different appearances of the noise.
 
@@ -111,6 +111,21 @@ The exact arguments we used for this are given below:
 float n = (fractal_noise(i.srcPos , 5, _Freq, 0.7) + 1.0) * 0.5;
 ```
 In particular, `_Freq` is a user-provided uniform which we defaulted to 8. We also did a bit of extra math to generally brighten the sun a little bit, by taking a weighted average of the `fractal_noise` and `1.0f`.
+
+#### Sunspots
+
+We used the below code snippet of code to generate our sunspots.
+```
+float s = 0.3;
+float t1 = snoise(sPosition * _ssFreq) - s;
+float t2 = snoise((sPosition + _Radius) * _ssFreq) - s;
+float ss = (max(t1, 0.0) * max(t2, 0.0)) * 2.0;
+
+// Accumulate total noise
+float total = n - ss;
+```
+
+This code uses more perlin noise, albeit at a lower frequency (`_ssFreq` denotes the sunspot frequency uniform), and subtracting this from our total to create dark spots on the surface of the star. The purpose of the `t2` parameter along with the `_Radius` parameter was to properly adjust the sunspots based on real stars. Sunspots in stars tend to be the same size, but larger stars have more sunspots. To emulate this, we simulated more but smaller sunspots on larger stars. For images of sunspots, see the results section below.
 
 #### Blackbody Radiation and Color Shifting
 The noise-based rendering only gives the brightness of the light, but using some physics it's possible to compute the color of the light based on the temperature of the star. There are two components that need to be accounted for: the actual color of the blackbody radiation itself, and the change in intensity. The formula for computing blackbody radiation wavelength strength is given by
