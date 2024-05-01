@@ -286,6 +286,10 @@ In the main eclipse renderings, we opted to shoot for a more photorealistic resu
 Above left: the texture of the moon, with brightness manually increased. Above right: the displaced mesh of the moon.
 </p>
 
+### Deliverable Video
+
+<iframe src="https://drive.google.com/file/d/1hW5jzforOLcZgpmrHi9ynKMa8VO7BY5i/preview" width="640" height="480" allow="autoplay"></iframe>
+
 ### References
 
 1. Procedural Star Rendering. Benjamin Arnold, Seed of Andromeda. https://web.archive.org/web/20150910041136/https://www.seedofandromeda.com/blogs/51-procedural-star-rendering.
