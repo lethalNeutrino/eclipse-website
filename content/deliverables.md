@@ -55,10 +55,8 @@ To smoothly vary our noise textures across not just the surface of the star, but
 
 <style>
 img {
-  display: block;
   margin-left: auto;
   margin-right: auto;
-  width: 90%;
 }
 </style>
 
@@ -186,16 +184,16 @@ Below is an image of the sun without an eclipsing moon:
 In addition, by modifying the distance between the camera and the scene, we are able to simulate an annular eclipse, and by rotating the camera around the sun, we are able to simulate a partial eclipse:
 
 <p style="text-align:center">
-<img src="./sun_annular.png" style="width:40%">
-<img src="./sun_partial.png" style="width:40%">
+<img src="./sun_annular.png" style="width:30%"> <img src="./sun_partial.png" style="width:30%">
+<br>
 Above left: a simulation of an annular eclipse. Above right: a simulation of a partial eclipse
 </p>
 
 Below is an example of two different star temperatures, demonstrating blackbody radiation.
 
 <p style="text-align:center">
-<img src="./sun_warmer.png" style="width:40%">
-<img src="./sun_hot.png" style="width:40%">
+<img src="./sun_warmer.png" style="width:30%"> <img src="./sun_hot.png" style="width:30%">
+<br>
 Above left: a simulation of a star at approximately 3200K. Above right: a simulation of a star at approximately 4500K.
 </p>
 
