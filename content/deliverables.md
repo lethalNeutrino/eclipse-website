@@ -114,6 +114,44 @@ float n = (fractal_noise(i.srcPos , 5, _Freq, 0.7) + 1.0) * 0.5;
 ```
 In particular, `_Freq` is a user-provided uniform which we defaulted to 8. We also did a bit of extra math to generally brighten the sun a little bit, by taking a weighted average of the `fractal_noise` and `1.0f`.
 
+#### Extra Star Texture Additions
+
+The base texture for our star has the same temperature (given as a parameter) for every point in the star, resulting in the same color 
+(just with brightening and darkening based on fractal noise) for all points on the star. This is not very photorealistic, since 
+photographs of the sun show some variation between red, orange, yellow, and white. This is present on both a large and small scale 
+level. At the large scale level, it can be seen in photographs of the sun that some large chunks have a different color than 
+surrounding areas (likely due to hotter or cooler temperatures). At the small scale level, it can be seen that there are micro 
+variations between red/orange/yellow, and looks kind of "spotty". This was implemented in the shader by adding two types of noise: 
+gradient noise and cellular noise.
+
+Without any additional noise:
+
+<p style="text-align:center">
+<img src="../nothing_sun.png" style="width:30%">
+</p>
+
+The negative of cellular noise was added to the temperature to simulate variations in color at a small scale level. Cellular noise 
+is noise that resembles cells, where the visual effect is the coordinate space being partitioned into multiple "cells" which have 
+a clear barrier on the outside, and are brighter closer to the center of the cell. The negative of this noise was added to make a 
+faint cell structure where the boundaries are higher temperature/brighter (yellow) and the inside is lower temperature (red).
+
+With only cellular noise on top of the base texture:
+
+<p style="text-align:center">
+<img src="../cellular_sun.png" style="width:30%">
+</p>
+
+Gradient noise (scaled by an appropriate factor) was added to the temperature to simulate variations in color for large chunks. 
+Gradient noise when scaled by an appropriate factor can be used to have shading that looks like "splatters" where there is a 
+gradual transition between the color on the outside of the splatter to the color of the splatter. For the sun, the "splatters" were 
+low (or high) temperatures, and produced a gradual transition between red-orange to yellow-orange, for example.
+
+With gradient noise and cellular noise on top of the base texture:
+
+<p style="text-align:center">
+<img src="../nice_sun.png" style="width:30%">
+</p>
+
 #### Corona Rendering
 
 We also used fractal noise for the star's corona. The main approach was to sample the noise function based on time and the unit vector pointing from the sun to the pixel we wanted to color, and use the distance from the star to judge how bright the corona should be. (It's necessary to sample on time to make the noise actually change.) However, doing this alone doesn't create a convincing corona; it's too circular, it has lines pointing directly away from the star which looks extremely stiff and unnatural, and it flickers in and out of brightness with no rhyme or reason. In order to fix this, there were two main tricks we used to create something more similar to a real star's corona:
